@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">GrizliRobot</string>
+    <string name="chkbSaveAuth">Save</string>
+    <string name="bLogin">Login</string>
+    <string name="bLogout">Logout</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_close">Close</string>
+    <string name="info_close">This application closed several %s sec</string>
+    <string name="action_auth">action_auth</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="progress_dialog_auth">Authorization</string>
+    <string name="progress_dialog_login">Authorization</string>
+    <string name="bSearch">Search</string>
+    <string name="chbDeleteFriends">Delete friends</string>
+    <string name="chbUnsubcribeTweets">Unsubscribe tweets</string>
+    <string name="btnRunDelete">Run</string>
+    <string name="screen_name">Screen name:</string>
+    <string name="search">Input your search phrase</string>
+    <string name="dateSince">Input your date since (ddmmyyyy)</string>
+    <string name="dateUntil">Input your date until (ddmmyyyy)</string>
+    <string name="user_name">User name</string>
+    <string name="user_name1">user_name</string>
+    <string name="etDateSince">dd.mm.yyyy</string>
+    <string name="tvSince">Since:</string>
+    <string name="tvUntil">Until:</string>
+    <string name="create_friends">Create friends</string>
+    <string name="follow_tweet">Follow tweets</string>
+    <string name="tvCount">Count</string>
+    <string name="rMixed">Mixed</string>
+    <string name="rRecent">Recent</string>
+    <string name="rPopular">Popular</string>
+
+</resources>
