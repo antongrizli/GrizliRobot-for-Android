@@ -18,11 +18,12 @@ import com.antongrizli.grizlirobot.model.async_task.AsyncTaskTwitter;
 import java.util.concurrent.ExecutionException;
 
 import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    private final String MAIN = "MAIN_ACTIVITY";
+    private final String LOG = "MAIN_ACTIVITY";
     private TwitterAuth auth = TwitterAuth.getInstance();
-    private Twitter twitter;
+    private Twitter twitter = null;
 
 
     private final static String PREFS_NAME = "config";
@@ -32,19 +33,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         auth.setContext(getApplicationContext());
         setContentView(R.layout.activity_main);
-
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        Boolean chkSave = settings.getBoolean("save", false);
-        if (chkSave) {
-            Log.i(MAIN, "Load saved values. CheckBox is " + chkSave);
-            twitter = auth.getTwitter();
-            try {
-                Toast.makeText(getApplicationContext(), new AsyncTaskTwitter().execute(twitter).get(), Toast.LENGTH_SHORT).show();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+        if (twitter == null) {
+            if (!auth.isConnect()) {
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                Boolean chkSave = settings.getBoolean("save", false);
+                if (chkSave) {
+                    Log.i(LOG, "Load saved values. CheckBox is " + chkSave);
+                    twitter = auth.getTwitter();
+                    try {
+                        Toast.makeText(getApplicationContext(), new AsyncTaskTwitter().execute(twitter).get(), Toast.LENGTH_SHORT).show();
+                    } catch (InterruptedException | ExecutionException e) {
+                        Log.e(LOG, "Exception in auth", e);
+                    }
+                }
             }
+            twitter = TwitterFactory.getSingleton();
         }
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -97,10 +100,8 @@ public class MainActivity extends AppCompatActivity {
             twitter = auth.getTwitterL();
             try {
                 Toast.makeText(getApplicationContext(), new AsyncTaskTwitter().execute(twitter).get(), Toast.LENGTH_SHORT).show();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+            } catch (InterruptedException | ExecutionException e) {
+                Log.e(LOG, "Exception on get screen name", e);
             }
         } else {
             alertConnectDialog();
@@ -112,11 +113,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Log.i(MAIN, "Run settings");
+                Log.i(LOG, "Run settings");
                 setContentView(R.layout.settings_layout);
                 break;
             case R.id.action_close:
-                Log.i(MAIN, "Closed application");
+                Log.i(LOG, "Closed application");
                 Toast.makeText(this, String.format(getString(R.string.info_close), 3), Toast.LENGTH_LONG).show();
                 new Thread(new Runnable() {
                     @Override
@@ -124,21 +125,18 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
-                            Log.e(MAIN, "Error when sleep 3 seconds", e);
+                            Log.e(LOG, "Error when sleep 3 seconds", e);
                         }
                         finish();
                     }
                 }).start();
                 break;
             case R.id.action_auth:
-                Log.i(MAIN, "Run auth layout");
+                Log.i(LOG, "Run auth layout");
                 Intent loginActivity = new Intent(this, LoginActivity.class);
                 startActivity(loginActivity);
                 break;
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 }
